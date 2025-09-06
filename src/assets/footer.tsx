@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
 
                 {/* Links */}
                 <div>
-                    <h3 className="text-white font-semibold mb-3">Quick Links</h3>
+                    <h3 className="text-white font-semibold mb-3"> Our Quick Links</h3>
                     <ul className="space-y-2">
                         <li>
                             <Link to="/" className="hover:text-red-400 transition">
@@ -42,9 +42,9 @@ const Footer: React.FC = () => {
                 {/* Contact */}
                 <div>
                     <h3 className="text-white font-semibold mb-3">Get in Touch</h3>
-                    <p>Email: support@autogear.com</p>
-                    <p>Phone: +1 (800) 123-4567</p>
-                    <p className="mt-2">123 Auto Street, Car City</p>
+                    <p>Email: vbt8ch18@gmail.com</p>
+                    <p>Phone: + (230) 5900 1000</p>
+                    <p className="mt-2">Swami Dayanand, Beau Bassin, Mauritius</p>
                 </div>
             </div>
 

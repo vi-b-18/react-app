@@ -72,7 +72,7 @@ const Header: React.FC = () => {
                     <Link to="/" onClick={() => setOpen(false)} className="block hover:text-red-400 transition">Home</Link>
                     <Link to="/accessories" onClick={() => setOpen(false)} className="block hover:text-red-400 transition">Products</Link>
                     <Link to="/about" onClick={() => setOpen(false)} className="block hover:text-red-400 transition">About</Link>
-                    <Link to="/contact" onClick={() => setOpen(false)} className="block hover:text-red-400 transition">Contact</Link>
+                    <Link to="/contact" onClick={() => setOpen(false)} className="block hover:text-red-400 transition">Get In Touch</Link>
                     <button
                         className="w-full flex justify-center items-center gap-2 bg-red-600 hover:bg-red-700 px-5 py-2 rounded-full shadow-lg transition"
                         onClick={() => { navigate("/accessories"); setOpen(false); }}
