@@ -1,18 +1,20 @@
-
-import Header from "./assets/header.tsx"
 import Landing from "./assets/landing.tsx";
-import Footer from "./assets/footer.tsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AccessoriesPage from "./assets/accessoryPage.tsx";
+import Layout from "./assets/layout.tsx";
 
 
-function App() {
+const App: React.FC = () => {
     return (
-        <div className="App scroll-smooth">
-            <Header />
-            <Landing/>
-            <Footer />
-        </div>
-
+        <Router>
+            <Layout>
+                <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/accessories" element={<AccessoriesPage />} />
+                </Routes>
+            </Layout>
+        </Router>
     );
-}
+};
 
 export default App;

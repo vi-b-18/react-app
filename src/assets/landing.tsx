@@ -1,157 +1,109 @@
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-export default function Landing() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [showMessage, setShowMessage] = useState(true);
+const LandingPage: React.FC = () => {
+    const navigate = useNavigate();
 
-    const message = "Welcome to AI Landing";
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        interface Particle {
-            x: number;
-            y: number;
-            vx: number;
-            vy: number;
-        }
-
-        const particles: Particle[] = [];
-        const numParticles = 250;
-        for (let i = 0; i < numParticles; i++) {
-            particles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 1.5,
-                vy: (Math.random() - 0.5) * 1.5,
-            });
-        }
-
-        function animate() {
-            // @ts-ignore
-            ctx.fillStyle = "#0a0a0a";
-            // @ts-ignore
-            ctx.fillRect(0, 0, width, height);
-
-            // @ts-ignore
-            ctx.fillStyle = "#00ffff";
-            particles.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-
-                if (p.x < 0 || p.x > width) p.vx *= -1;
-                if (p.y < 0 || p.y > height) p.vy *= -1;
-
-                // @ts-ignore
-                ctx.beginPath();
-                // @ts-ignore
-                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-                // @ts-ignore
-                ctx.fill();
-            });
-
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
-                        // @ts-ignore
-                        ctx.strokeStyle = `rgba(0,255,255,${1 - dist / 120})`;
-                        // @ts-ignore
-                        ctx.beginPath();
-                        // @ts-ignore
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        // @ts-ignore
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        // @ts-ignore
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        const handleResize = () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        };
-        window.addEventListener("resize", handleResize);
-
-        const timer = setTimeout(() => setShowMessage(false), 3500);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-            clearTimeout(timer);
-        };
-    }, []);
+    const streaks = Array.from({ length: 12 }, (_, i) => ({
+        left: `${Math.random() * 100}%`,
+        delay: Math.random() * 5,
+        width: Math.random() * 2 + 1,
+        height: Math.random() * 150 + 100,
+        color: ["#00FFFF", "#FF0000", "#FFD700"][i % 3],
+    }));
 
     return (
-        <section className="h-screen w-screen relative overflow-hidden bg-black">
-            <canvas ref={canvasRef} className="absolute top-0 left-0" />
+        <div className="relative overflow-hidden bg-gradient-to-b from-gray-900 via-purple-950 to-black text-white min-h-screen">
+            {streaks.map((streak, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute top-0"
+                    style={{
+                        left: streak.left,
+                        width: `${streak.width}px`,
+                        height: `${streak.height}px`,
+                        backgroundColor: streak.color,
+                        opacity: 0.5,
+                        borderRadius: "50%",
+                    }}
+                    animate={{ y: ["-150%", "110%"] }}
+                    transition={{
+                        duration: 6 + Math.random() * 4,
+                        repeat: Infinity,
+                        delay: streak.delay,
+                        ease: "linear",
+                    }}
+                />
+            ))}
 
-            {/* Disintegrating message */}
-            {showMessage ? (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white text-4xl font-bold">
-                    {message.split("").map((char, index) => (
-                        <span
-                            key={index}
-                            className="inline-block"
-                            style={{
-                                display: "inline-block",
-                                animation: `disintegrate 2s forwards`,
-                                animationDelay: `${index * 0.05}s`,
-                            }}
-                        >
-                            {char}
-                        </span>
-                    ))}
-                </div>
-            ) : (
-                // Robot logo after message disappears
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                    <svg
-                        className="w-32 h-32 animate-fadeIn"
-                        viewBox="0 0 64 64"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+            <section className="h-screen flex flex-col justify-center items-center text-center px-6 relative z-10">
+                <motion.h1
+                    className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1 }}
+                >
+                    Upgrade Your Ride <br /> with <span className="text-red-500">Style</span>
+                </motion.h1>
+
+                <motion.p
+                    className="max-w-2xl text-lg text-gray-300 mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                >
+                    Discover premium car accessories to boost performance, style, and durability.
+                </motion.p>
+
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-full font-semibold shadow-xl"
+                    onClick={() => navigate("/accessories")}
+                >
+                    Shop Now
+                </motion.button>
+            </section>
+
+            <section className="py-20 px-10 grid md:grid-cols-3 gap-10 bg-gray-900">
+                {[
+                    { title: "Premium Quality", desc: "Top-notch materials for long-lasting performance." },
+                    { title: "Fast Delivery", desc: "Get your car parts shipped quickly and safely." },
+                    { title: "Modern Design", desc: "Parts that enhance style and functionality." },
+                ].map((feature, i) => (
+                    <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.05 }}
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.2 }}
+                        viewport={{ once: true }}
+                        className="bg-gray-800 rounded-2xl p-8 shadow-xl"
                     >
-                        <rect x="20" y="10" width="24" height="24" rx="4" fill="#00ffff"/>
-                        <circle cx="26" cy="20" r="3" fill="#000"/>
-                        <circle cx="38" cy="20" r="3" fill="#000"/>
-                        <rect x="26" y="30" width="12" height="6" rx="3" fill="#000"/>
-                        <rect x="18" y="40" width="28" height="12" rx="2" fill="#00ffff"/>
-                    </svg>
-                </div>
-            )}
+                        <h3 className="text-xl font-semibold mb-4 text-red-400">{feature.title}</h3>
+                        <p className="text-gray-300">{feature.desc}</p>
+                    </motion.div>
+                ))}
+            </section>
 
-            <style>{`
-                @keyframes disintegrate {
-                    0% { opacity: 1; transform: translate(0,0) rotate(0deg); }
-                    100% { 
-                        opacity: 0; 
-                        transform: translate(${Math.random()*400-200}px, ${Math.random()*400-200}px) rotate(${Math.random()*720-360}deg); 
-                    }
-                }
-
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: scale(0.5); }
-                    to { opacity: 1; transform: scale(1); }
-                }
-
-                .animate-fadeIn {
-                    animation: fadeIn 1s forwards;
-                }
-            `}</style>
-        </section>
+            <section className="py-20 text-center bg-gradient-to-r from-red-600 to-red-800">
+                <motion.h3
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    className="text-4xl font-bold mb-6"
+                >
+                    Ready to Upgrade Your Car?
+                </motion.h3>
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    className="px-8 py-4 bg-white text-red-600 rounded-full font-bold shadow-lg"
+                    onClick={() => navigate("/accessories")}
+                >
+                    Start Shopping
+                </motion.button>
+            </section>
+        </div>
     );
-}
+};
+
+export default LandingPage;
