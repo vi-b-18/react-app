@@ -34,7 +34,7 @@ const Header: React.FC = () => {
                     </motion.div>
 
                     {/* Brand name */}
-                    <span className="text-2xl font-bold tracking-wide">AutoGear</span>
+                    <span className="text-2xl font-bold tracking-wide">AutoGears</span>
                 </motion.div>
 
                 {/* Desktop Nav */}
